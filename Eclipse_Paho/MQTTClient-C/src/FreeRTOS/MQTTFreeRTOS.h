@@ -11,30 +11,31 @@
  *   http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
- *    Allan Stockdill-Mander - initial API and implementation and/or initial documentation
+ *    Allan Stockdill-Mander - initial API and implementation and/or initial
+ *documentation
  *******************************************************************************/
 
 #if !defined(MQTTFreeRTOS_H)
 #define MQTTFreeRTOS_H
 
 #include "FreeRTOS.h"
-#include "FreeRTOS_Sockets.h"
 #include "FreeRTOS_IP.h"
+#include "FreeRTOS_Sockets.h"
 #include "semphr.h"
 #include "task.h"
 
 typedef struct Timer {
-    TickType_t xTicksToWait;
-    TimeOut_t xTimeOut;
+  TickType_t xTicksToWait;
+  TimeOut_t xTimeOut;
 } Timer;
 
 typedef struct Network Network;
 
 struct Network {
-    xSocket_t my_socket;
-    int (*mqttread)(Network *, unsigned char *, int, int);
-    int (*mqttwrite)(Network *, unsigned char *, int, int);
-    void (*disconnect)(Network *);
+  xSocket_t my_socket;
+  int (*mqttread)(Network *, unsigned char *, int, int);
+  int (*mqttwrite)(Network *, unsigned char *, int, int);
+  void (*disconnect)(Network *);
 };
 
 void TimerInit(Timer *);
@@ -44,7 +45,7 @@ void TimerCountdown(Timer *, unsigned int);
 int TimerLeftMS(Timer *);
 
 typedef struct Mutex {
-    SemaphoreHandle_t sem;
+  SemaphoreHandle_t sem;
 } Mutex;
 
 void MutexInit(Mutex *);
@@ -52,7 +53,7 @@ int MutexLock(Mutex *);
 int MutexUnlock(Mutex *);
 
 typedef struct Thread {
-    TaskHandle_t task;
+  TaskHandle_t task;
 } Thread;
 
 int ThreadStart(Thread *, void (*fn)(void *), void *arg);
@@ -63,6 +64,7 @@ void FreeRTOS_disconnect(Network *);
 
 void NetworkInit(Network *);
 int NetworkConnect(Network *, char *, int);
-/*int NetworkConnectTLS(Network*, char*, int, SlSockSecureFiles_t*, unsigned char, unsigned int, char);*/
+/*int NetworkConnectTLS(Network*, char*, int, SlSockSecureFiles_t*, unsigned
+ * char, unsigned int, char);*/
 
 #endif

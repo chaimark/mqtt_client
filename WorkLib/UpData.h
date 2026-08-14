@@ -15,8 +15,8 @@
 #define MyPrintf(...) HAL_Delay(10)
 
 #if (ISBootLoader == 0)
-#include "cJson.h"
 #include "NumberBaseLib.h"
+#include "cJson.h"
 #endif
 
 // PAGE_SIZE == 2048
@@ -48,19 +48,19 @@ void flash_read_page(uint32_t addr, uint8_t *buf);
 #define UPDATA_SIGN 0xaa55aa55
 
 typedef struct _UpdataFlag {
-    uint32_t sign;    // 标志位
-    uint32_t pageNum; // 程序占用的 flash 页数
-    uint8_t checkSum; // 校验和
+  uint32_t sign;    // 标志位
+  uint32_t pageNum; // 程序占用的 flash 页数
+  uint8_t checkSum; // 校验和
 } UpdataFlag;
 extern UpdataFlag UpdataParam;
 
 typedef struct _UpdataDataTemp {
-    char Sign;
-    int PackLen;
-    int NowPackNum; // 接收到的包序号
-    int NowPageNum; // 当前包所在的页号
-    uint8_t Page8Buff[PAGE_SIZE];
-    int NowLen_Page8Buff;
+  char Sign;
+  int PackLen;
+  int NowPackNum; // 接收到的包序号
+  int NowPageNum; // 当前包所在的页号
+  uint8_t Page8Buff[PAGE_SIZE];
+  int NowLen_Page8Buff;
 } UpdataDataTemp;
 extern UpdataDataTemp UpdataData;
 

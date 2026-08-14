@@ -17,20 +17,29 @@ extern double buffToFloatOrDouble(strnew OutBuff, bool IsDouble);
 // 将 Double Or Float 存到 char 数组 中
 extern void doubleOrFloatToBuff(strnew OutBuff, double Number, bool IsDouble);
 
-// 将数组串转字符串 0x01 0x02 ==> 0x31 0x32(需要注意: NeedLen 是 NumberArray 中需要转换的长度)
-extern void numberArrayToStrArray(strnew StrArray, const strnew NumberArray, int NeedLen);
+// 将数组串转字符串 0x01 0x02 ==> 0x31 0x32(需要注意: NeedLen 是 NumberArray
+// 中需要转换的长度)
+extern void numberArrayToStrArray(strnew StrArray, const strnew NumberArray,
+                                  int NeedLen);
 
-// 将字符串转数组串 0x31 0x32 ==> 0x01 0x02(需要注意: NeedLen 是 StrArray 中需要转换的长度)
-extern void strArrayToNumberArray(strnew NumberArray, const strnew StrArray, int NeedLen);
+// 将字符串转数组串 0x31 0x32 ==> 0x01 0x02(需要注意: NeedLen 是 StrArray
+// 中需要转换的长度)
+extern void strArrayToNumberArray(strnew NumberArray, const strnew StrArray,
+                                  int NeedLen);
 
 // 任意进制互转
-extern uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase);
+extern uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase,
+                                 int OutputBase);
 
-// 任意进制数 转 任意进制数组 返回长度 Dex(56) ==> 0x05 0x06 (注意：OutArray 的长度需要大于 Number 的长度)
-extern int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, strnew OutArray);
+// 任意进制数 转 任意进制数组 返回长度 Dex(56) ==> 0x05 0x06 (注意：OutArray
+// 的长度需要大于 Number 的长度)
+extern int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase,
+                                       int OutputBase, strnew OutArray);
 
-// 注意 strnew 数组必须沾满，任意进制数组 转 任意进制数 string:12345600 ==> 12345600
-extern int64_t anyBaseArrayToAnyBaseNumber(strnew IntArray, int IntputBase, int OutputBase);
+// 注意 strnew 数组必须沾满，任意进制数组 转 任意进制数 string:12345600 ==>
+// 12345600
+extern int64_t anyBaseArrayToAnyBaseNumber(strnew IntArray, int IntputBase,
+                                           int OutputBase);
 
 // 单字节数组 转 双字节数组 0x23 --> 0x02 0x03
 extern int shortChStrToDoubleChStr(const strnew inputArray, strnew OutputArray);
@@ -39,16 +48,19 @@ extern int shortChStrToDoubleChStr(const strnew inputArray, strnew OutputArray);
 extern int doubleChStrToShortChStr(const strnew inputArray, strnew OutputArray);
 
 // 字符串转 任意进制数
-extern int doneAsciiStrToAnyBaseNumberData(const char AscArray[], int OutputBase);
+extern int doneAsciiStrToAnyBaseNumberData(const char AscArray[],
+                                           int OutputBase);
 
 // 任意进制数 转 字符串
-extern int doneBaseNumberDataToAsciiStr(strnew AscArray, int NumberData, int IntputBase);
+extern int doneBaseNumberDataToAsciiStr(strnew AscArray, int NumberData,
+                                        int IntputBase);
 
 // 字符串 转 double
 extern double doneAsciiToDouble(char AscArray[]);
 
 // double 转 字符串
-extern void doneDoubleToAscii(char AscArray[], const char From[], double InputData);
+extern void doneDoubleToAscii(char AscArray[], const char From[],
+                              double InputData);
 
 // 读取某位 返回对应位的 bool 值
 extern bool readDataBit(uint64_t InputNumber, int8_t BitNumber);
@@ -64,7 +76,8 @@ extern int ASCIIToHEX2(const strnew asc, strnew hex);
 extern uint16_t U8_Connect_U8(uint8_t H_Part, uint8_t L_Part);
 
 // 获取某个值在某段区间类所在点的百分比
-extern float getPartOfSetPointOnRing(uint32_t SetPoint, uint32_t Min_Ring, uint32_t Max_Ring);
+extern float getPartOfSetPointOnRing(uint32_t SetPoint, uint32_t Min_Ring,
+                                     uint32_t Max_Ring);
 
 // 给定一个 ip 字符串 192.168.1.1 ==> [c0] [a8] [01] [01]
 extern void iPstrToHexArray(strnew IpHex, const char *Ipstr);

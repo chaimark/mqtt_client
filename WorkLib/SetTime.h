@@ -13,27 +13,29 @@
 
 /******************XXTIM********************/
 typedef struct _Task_T {
-    strnew Name;
-    bool TimeTask_Falge; // 当前计时任务是否完成
-    bool isTaskStart;    // 当前计时任务是否开启
-    uint64_t CountNum;
-    uint64_t CountMaxNum;
-    void *arg;
-    void (*TaskFunc)(void *);
-    struct _Task_T *next;
-    struct _Task_T *prev;
+  strnew Name;
+  bool TimeTask_Falge; // 当前计时任务是否完成
+  bool isTaskStart;    // 当前计时任务是否开启
+  uint64_t CountNum;
+  uint64_t CountMaxNum;
+  void *arg;
+  void (*TaskFunc)(void *);
+  struct _Task_T *next;
+  struct _Task_T *prev;
 } Task_T;
 typedef struct _timetask {
-    int NumberOfTimeTask;
-    Task_T *Head;
-    Task_T *(*getTaskByName)(struct _timetask This, strnew Name);
-    int (*addTaskNode)(struct _timetask This, strnew Name);
-    void (*initTaskByName)(struct _timetask This, strnew Name, uint64_t CountMaxNum, void (*TaskFunc)(void *), void *arg);
-    void (*stopTaskByName)(struct _timetask This, strnew Name);
-    void (*resetTaskByName)(struct _timetask This, strnew Name);
-    void (*delTaskByName)(struct _timetask This, strnew Name);
-    void (*closeTaskAll)(struct _timetask This);
-    void (*countSetTimeTask)(struct _timetask This);
+  int NumberOfTimeTask;
+  Task_T *Head;
+  Task_T *(*getTaskByName)(struct _timetask This, strnew Name);
+  int (*addTaskNode)(struct _timetask This, strnew Name);
+  void (*initTaskByName)(struct _timetask This, strnew Name,
+                         uint64_t CountMaxNum, void (*TaskFunc)(void *),
+                         void *arg);
+  void (*stopTaskByName)(struct _timetask This, strnew Name);
+  void (*resetTaskByName)(struct _timetask This, strnew Name);
+  void (*delTaskByName)(struct _timetask This, strnew Name);
+  void (*closeTaskAll)(struct _timetask This);
+  void (*countSetTimeTask)(struct _timetask This);
 } timetask;
 
 // 定时任务初始化

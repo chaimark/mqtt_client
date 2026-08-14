@@ -14,8 +14,8 @@
 
 // 类定义
 typedef struct _Check_XTHF_Or_XTLF {
-    uint8_t is_XTClock_Error;
-    void (*UserTask)(void);
+  uint8_t is_XTClock_Error;
+  void (*UserTask)(void);
 } Check_XTHF_Or_XTLF;
 extern Check_XTHF_Or_XTLF XTClock_CheckTask;
 

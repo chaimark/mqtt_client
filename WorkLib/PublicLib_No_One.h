@@ -7,13 +7,13 @@
 extern timetask RTC_Task;
 extern timetask Uart_Task;
 typedef struct _TimeStuClass {
-    uint32_t year;   /** 年 */
-    uint32_t month;  /** 月 */
-    uint32_t day;    /** 日 */
-    uint32_t week;   /** 周 */
-    uint32_t hour;   /** 时 */
-    uint32_t minute; /** 分 */
-    uint32_t second; /** 秒 */
+  uint32_t year;   /** 年 */
+  uint32_t month;  /** 月 */
+  uint32_t day;    /** 日 */
+  uint32_t week;   /** 周 */
+  uint32_t hour;   /** 时 */
+  uint32_t minute; /** 分 */
+  uint32_t second; /** 秒 */
 } TimeStuClass;
 
 /*
