@@ -48,7 +48,7 @@
 #include <string.h>
 
 typedef struct Timer {
-  struct timeval end_time;
+    struct timeval end_time;
 } Timer;
 
 void TimerInit(Timer *);
@@ -58,9 +58,9 @@ void TimerCountdown(Timer *, unsigned int);
 int TimerLeftMS(Timer *);
 
 typedef struct Network {
-  int my_socket;
-  int (*mqttread)(struct Network *, unsigned char *, int, int);
-  int (*mqttwrite)(struct Network *, unsigned char *, int, int);
+    int my_socket;
+    int (*mqttread)(struct Network *, unsigned char *, int, int);
+    int (*mqttwrite)(struct Network *, unsigned char *, int, int);
 } Network;
 
 int linux_read(Network *, unsigned char *, int, int);

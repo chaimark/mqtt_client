@@ -25,17 +25,17 @@
 #include "task.h"
 
 typedef struct Timer {
-  TickType_t xTicksToWait;
-  TimeOut_t xTimeOut;
+    TickType_t xTicksToWait;
+    TimeOut_t xTimeOut;
 } Timer;
 
 typedef struct Network Network;
 
 struct Network {
-  xSocket_t my_socket;
-  int (*mqttread)(Network *, unsigned char *, int, int);
-  int (*mqttwrite)(Network *, unsigned char *, int, int);
-  void (*disconnect)(Network *);
+    xSocket_t my_socket;
+    int (*mqttread)(Network *, unsigned char *, int, int);
+    int (*mqttwrite)(Network *, unsigned char *, int, int);
+    void (*disconnect)(Network *);
 };
 
 void TimerInit(Timer *);
@@ -45,7 +45,7 @@ void TimerCountdown(Timer *, unsigned int);
 int TimerLeftMS(Timer *);
 
 typedef struct Mutex {
-  SemaphoreHandle_t sem;
+    SemaphoreHandle_t sem;
 } Mutex;
 
 void MutexInit(Mutex *);
@@ -53,7 +53,7 @@ int MutexLock(Mutex *);
 int MutexUnlock(Mutex *);
 
 typedef struct Thread {
-  TaskHandle_t task;
+    TaskHandle_t task;
 } Thread;
 
 int ThreadStart(Thread *, void (*fn)(void *), void *arg);
