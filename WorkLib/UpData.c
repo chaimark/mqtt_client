@@ -50,8 +50,7 @@ int flash_write_page(uint32_t addr, uint8_t *buf) {
     // 尝试最多3次
     for (int n = 0; n < 3; n++) {
         // 初始化页擦除结构体
-        EraseInitStruct.TypeErase =
-            FLASH_TYPEERASE_PAGES; /*!<Flash mass erase activation*/
+        EraseInitStruct.TypeErase = FLASH_TYPEERASE_PAGES; /*!<Flash mass erase activation*/
         EraseInitStruct.PageAddress = addr;
         EraseInitStruct.NbPages = 1;
         // 解锁Flash
@@ -87,8 +86,7 @@ EndFlash:
 // 读标志扇区
 void updataReadSign(void) {
     uint8_t *p = (uint8_t *)(&UpdataParam);
-    for (size_t i = 0; i < sizeof(UpdataFlag); i++)
-        p[i] = *(uint8_t *)(UPDATA_PAGE_SIGN + i);
+    for (size_t i = 0; i < sizeof(UpdataFlag); i++) p[i] = *(uint8_t *)(UPDATA_PAGE_SIGN + i);
 }
 // 写标志扇区
 void updataWriteSign(void) {
@@ -119,9 +117,7 @@ int updataCheck(void) {
         memset(UpdataData.Page8Buff, 0, PAGE_SIZE); // 初始化读取空间
         flash_read_page(UPDATA_PAGE_BEGIN + (i * PAGE_SIZE),
                         UpdataData.Page8Buff); // 读
-        if (flashCheckReadPageData(UPDATA_PAGE_BEGIN + (i * PAGE_SIZE),
-                                   UpdataData.Page8Buff,
-                                   PAGE_SIZE) < 0) {
+        if (flashCheckReadPageData(UPDATA_PAGE_BEGIN + (i * PAGE_SIZE), UpdataData.Page8Buff, PAGE_SIZE) < 0) {
             return -1; // flash 与 buff 不一致读取失败
         }
         // 累加校验和
@@ -141,8 +137,7 @@ int updataCopyProgram(void) {
     for (int j = 0; j < 3; j++) {
         for (int i = 0; i < UpdataParam.pageNum; i++) {
             // 读
-            flash_read_page(UPDATA_PAGE_BEGIN + (i * PAGE_SIZE),
-                            UpdataData.Page8Buff);
+            flash_read_page(UPDATA_PAGE_BEGIN + (i * PAGE_SIZE), UpdataData.Page8Buff);
 
             // 写
             addr = (UPDATA_MCU_BASE + UPDATA_MCU_OFFSET) + (i * PAGE_SIZE);
@@ -165,13 +160,11 @@ int updataCopyProgram(void) {
 uint8_t UpdataCsDelat; // 校验差
 // 读取 flash 数据 ==> 缓存区
 void readFlashDataToUpdataBuff(uint8_t PageNum) {
-    flash_read_page((UPDATA_PAGE_BEGIN + PageNum * PAGE_SIZE),
-                    UpdataData.Page8Buff);
+    flash_read_page((UPDATA_PAGE_BEGIN + PageNum * PAGE_SIZE), UpdataData.Page8Buff);
 }
 // 写入 缓存区数据 ==> flash
 void writeUpdataBuffDataToFlash(uint8_t PageNum) {
-    flash_write_page((UPDATA_PAGE_BEGIN + PageNum * PAGE_SIZE),
-                     UpdataData.Page8Buff);
+    flash_write_page((UPDATA_PAGE_BEGIN + PageNum * PAGE_SIZE), UpdataData.Page8Buff);
 }
 // 计算包所在的 flash 页
 int ComputeNeedPage(int PackNum, int PackLen) {
@@ -187,8 +180,7 @@ int NowPackIsGotoNextPage(int NowPageNum, int NowPackNum) {
     if (NowPackNum * UpdataData.PackLen > (NowPageNum + 1) * PAGE_SIZE) {
         return -1; // 确保页面号与 包序号正确
     }
-    return ((NowPageNum + 1) * PAGE_SIZE -
-            NowPackNum * UpdataData.PackLen); // 当前页剩余空间
+    return ((NowPageNum + 1) * PAGE_SIZE - NowPackNum * UpdataData.PackLen); // 当前页剩余空间
 }
 // 把当前包存入缓存区, 如果缓存区满, 则写 flash
 // 备注： NowPackNum == -1 则将剩下缓存区写入 flash
@@ -203,18 +195,15 @@ int SaveUpdataToPage8Buff(int NowPageNum, int NowPackNum, strnew NowCodeHex) {
     }
     if (RestLen < NowCodeHex.MaxLen) { // 需要跳页
         UpdataData.NowLen_Page8Buff = PAGE_SIZE - RestLen;
-        memcpy(&UpdataData.Page8Buff[UpdataData.NowLen_Page8Buff],
-               NowCodeHex.Name._char,
-               RestLen);
+        memcpy(&UpdataData.Page8Buff[UpdataData.NowLen_Page8Buff], NowCodeHex.Name._char, RestLen);
         writeUpdataBuffDataToFlash(NowPageNum);
         readFlashDataToUpdataBuff(NowPageNum + 1);
         memset(UpdataData.Page8Buff, 0xFF, PAGE_SIZE);
         memcpy(UpdataData.Page8Buff, NowCodeHex.Name._char + RestLen, NowCodeHex.MaxLen - RestLen);
         UpdataData.NowPageNum = (++NowPageNum);
         UpdataData.NowLen_Page8Buff = NowCodeHex.MaxLen - RestLen;
-    } else { // 不需要跳页
-        int Addr = (NowPackNum * UpdataData.PackLen) %
-                   PAGE_SIZE; // 当前包需要保存到缓存区的角标
+    } else {                                                      // 不需要跳页
+        int Addr = (NowPackNum * UpdataData.PackLen) % PAGE_SIZE; // 当前包需要保存到缓存区的角标
         memcpy(&UpdataData.Page8Buff[Addr], NowCodeHex.Name._char, NowCodeHex.MaxLen);
         UpdataData.NowLen_Page8Buff = Addr + NowCodeHex.MaxLen;
     }
@@ -284,10 +273,7 @@ int UpData_Receive_Hex(JsonObject BinCode) {
         goto OverSub;
     }
     UpdataData.NowPackNum = BinCode.getInt(&BinCode, "NowPackNum"); // 获取包序号
-    FlagCodeNum = SaveUpdataToPage8Buff(
-        ComputeNeedPage(UpdataData.NowPackNum, UpdataData.PackLen),
-        UpdataData.NowPackNum,
-        CodeStr);
+    FlagCodeNum = SaveUpdataToPage8Buff(ComputeNeedPage(UpdataData.NowPackNum, UpdataData.PackLen), UpdataData.NowPackNum, CodeStr);
 OverSub:
     if (UpdataData.NowLen_Page8Buff == PAGE_SIZE) {
         writeUpdataBuffDataToFlash(UpdataData.NowPageNum);

@@ -32,7 +32,7 @@ extern uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase
 // 的长度需要大于 Number 的长度)
 extern int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, strnew OutArray);
 
-// 注意 strnew 数组必须沾满，任意进制数组 转 任意进制数 string:12345600 ==>
+// 注意 strnew 数组必须沾满, 任意进制数组 转 任意进制数 string:12345600 ==>
 // 12345600
 extern int64_t anyBaseArrayToAnyBaseNumber(strnew IntArray, int IntputBase, int OutputBase);
 
@@ -43,8 +43,7 @@ extern int shortChStrToDoubleChStr(const strnew inputArray, strnew OutputArray);
 extern int doubleChStrToShortChStr(const strnew inputArray, strnew OutputArray);
 
 // 字符串转 任意进制数
-extern int doneAsciiStrToAnyBaseNumberData(const char AscArray[],
-                                           int OutputBase);
+extern int doneAsciiStrToAnyBaseNumberData(const char AscArray[], int OutputBase);
 
 // 任意进制数 转 字符串
 extern int doneBaseNumberDataToAsciiStr(strnew AscArray, int NumberData, int IntputBase);

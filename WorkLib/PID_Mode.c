@@ -12,8 +12,7 @@ double _pid_compute(struct _PIDController This, double NowValue, double dt) {
     double derivative = (error - This.previous_error) / dt;
 
     // 计算 PID 输出
-    double output =
-        This.Kp * error + This.Ki * This.integral + This.Kd * derivative;
+    double output = This.Kp * error + This.Ki * This.integral + This.Kd * derivative;
 
     // 更新上一次的误差
     This.previous_error = error;

@@ -2,8 +2,7 @@
 #include "NumberBaseLib.h"
 
 uint16_t get_crc_modbus(strnew InputBuf, size_t num_bytes) {
-    const unsigned char *input_str =
-        (const unsigned char *)InputBuf.Name._uint8_t;
+    const unsigned char *input_str = (const unsigned char *)InputBuf.Name._uint8_t;
     uint16_t crc = CRC_START_MODBUS;
     if (input_str == NULL) {
         return crc;
@@ -28,8 +27,7 @@ bool is_crc_modbus(strnew InputBuf, size_t num_bytes) {
     }
     num_bytes -= 2;
     uint16_t crc = get_crc_modbus(InputBuf, num_bytes);
-    if (crc == U8_Connect_U8(InputBuf.Name._char[num_bytes],
-                             InputBuf.Name._char[num_bytes + 1])) {
+    if (crc == U8_Connect_U8(InputBuf.Name._char[num_bytes], InputBuf.Name._char[num_bytes + 1])) {
         return true;
     } else {
         return false;

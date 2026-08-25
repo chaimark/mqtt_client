@@ -91,8 +91,7 @@ void check_XTClock_isOk(void) {
             XTClock_CheckTask.UserTask();
         }
         MF_Clock_Init();
-        FL_RCC_SetLSCLKClockSource(
-            FL_RCC_LSCLK_CLK_SOURCE_XTLF); // 切换时钟源, 外部时钟
+        FL_RCC_SetLSCLKClockSource(FL_RCC_LSCLK_CLK_SOURCE_XTLF); // 切换时钟源, 外部时钟
         char TimeStr[20] = {0};
         getStrNowDataAndTimeByRTC(TimeStr);
         MF_RTC_1S_Init();
