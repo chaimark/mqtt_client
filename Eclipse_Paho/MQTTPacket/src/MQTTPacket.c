@@ -290,8 +290,7 @@ exit:
  * @param trp pointer to a transport structure holding what is needed to solve
  * getting data from it
  * @param value the decoded length returned
- * @return integer the number of bytes read from the socket, 0 for call again,
- * or -1 on error
+ * @return integer the number of bytes read from the socket, 0 for call again, * or -1 on error
  */
 static int MQTTPacket_decodenb(MQTTTransport *trp) {
     unsigned char c;
@@ -323,8 +322,7 @@ exit:
 }
 
 /**
- * Helper function to read packet data from some source into a buffer,
- * non-blocking
+ * Helper function to read packet data from some source into a buffer, * non-blocking
  * @param buf the buffer into which the packet will be serialized
  * @param buflen the length in bytes of the supplied buffer
  * @param trp pointer to a transport structure holding what is needed to solve

@@ -28,10 +28,8 @@ const char *MQTTPacket_getName(unsigned short packetid) {
 int MQTTStringFormat_connect(char *strbuf, int strbuflen, MQTTPacket_connectData *data) {
     int strindex = 0;
 
-    strindex = snprintf(strbuf,
-                        strbuflen,
-                        "CONNECT MQTT version %d, client id %.*s, clean session "
-                        "%d, keep alive %d",
+    strindex = snprintf(strbuf, strbuflen, "CONNECT MQTT version %d, client id %.*s, clean session "
+                                           "%d, keep alive %d",
                         (int)data->MQTTVersion,
                         data->clientID.lenstring.len,
                         data->clientID.lenstring.data,
@@ -52,10 +50,8 @@ int MQTTStringFormat_connack(char *strbuf, int strbuflen, unsigned char connack_
 }
 
 int MQTTStringFormat_publish(char *strbuf, int strbuflen, unsigned char dup, int qos, unsigned char retained, unsigned short packetid, MQTTString topicName, unsigned char *payload, int payloadlen) {
-    int strindex = snprintf(strbuf,
-                            strbuflen,
-                            "PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, "
-                            "payload length %d, payload %.*s",
+    int strindex = snprintf(strbuf, strbuflen, "PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, "
+                                               "payload length %d, payload %.*s",
                             dup,
                             qos,
                             retained,

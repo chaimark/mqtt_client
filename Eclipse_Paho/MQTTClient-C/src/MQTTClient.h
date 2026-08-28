@@ -75,8 +75,7 @@ typedef struct Network
     int (*mqttwrite)(Network*, unsigned char* send_buffer, int, int);
 } Network;*/
 
-/* The Timer structure must be defined in the platform specific header,
- * and have the following functions to operate on it.  */
+/* The Timer structure must be defined in the platform specific header, * and have the following functions to operate on it.  */
 extern void TimerInit(Timer *);
 extern char TimerIsExpired(Timer *);
 extern void TimerCountdownMS(Timer *, unsigned int);

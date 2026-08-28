@@ -40,9 +40,8 @@ static int sendPacket(MQTTClient *c, int length, Timer *timer) {
         sent += rc;
     }
     if (sent == length) {
-        TimerCountdown(&c->last_sent,
-                       c->keepAliveInterval); // record the fact that we have
-                                              // successfully sent the packet
+        TimerCountdown(&c->last_sent, c->keepAliveInterval); // record the fact that we have
+                                                             // successfully sent the packet
         rc = SUCCESS;
     } else
         rc = FAILURE;
@@ -125,9 +124,8 @@ static int readPacket(MQTTClient *c, Timer *timer) {
     header.byte = c->readbuf[0];
     rc = header.bits.type;
     if (c->keepAliveInterval > 0)
-        TimerCountdown(&c->last_received,
-                       c->keepAliveInterval); // record the fact that we have
-                                              // successfully received a packet
+        TimerCountdown(&c->last_received, c->keepAliveInterval); // record the fact that we have
+                                                                 // successfully received a packet
 exit:
     return rc;
 }
