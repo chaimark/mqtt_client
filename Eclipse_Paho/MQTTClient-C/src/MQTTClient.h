@@ -45,12 +45,10 @@ extern "C" {
 #include xstr(MQTTCLIENT_PLATFORM_HEADER)
 #endif
 
-#define MAX_PACKET_ID \
-    65535 /* according to the MQTT specification - do not change! */
+#define MAX_PACKET_ID 65535 /* according to the MQTT specification - do not change! */
 
 #if !defined(MAX_MESSAGE_HANDLERS)
-#define MAX_MESSAGE_HANDLERS \
-    5 /* redefinable - how many subscriptions do you want? */
+#define MAX_MESSAGE_HANDLERS 5 /* redefinable - how many subscriptions do you want? */
 #endif
 
 enum QoS {
@@ -153,9 +151,7 @@ DLLExport void MQTTClientInit(MQTTClient *client, Network *network, unsigned int
  *  @param options - connect options
  *  @return success code
  */
-DLLExport int MQTTConnectWithResults(MQTTClient *client,
-                                     MQTTPacket_connectData *options,
-                                     MQTTConnackData *data);
+DLLExport int MQTTConnectWithResults(MQTTClient *client, MQTTPacket_connectData *options, MQTTConnackData *data);
 
 /** MQTT Connect - send an MQTT connect packet down the network and wait for a
  * Connack The nework object must be connected to the network endpoint before
@@ -200,11 +196,7 @@ DLLExport int MQTTSubscribe(MQTTClient *client, const char *topicFilter, enum Qo
  *  @param data - suback granted QoS returned
  *  @return success code
  */
-DLLExport int MQTTSubscribeWithResults(MQTTClient *client,
-                                       const char *topicFilter,
-                                       enum QoS,
-                                       messageHandler,
-                                       MQTTSubackData *data);
+DLLExport int MQTTSubscribeWithResults(MQTTClient *client, const char *topicFilter, enum QoS, messageHandler, MQTTSubackData *data);
 
 /** MQTT Subscribe - send an MQTT unsubscribe packet and wait for unsuback
  * before returning.

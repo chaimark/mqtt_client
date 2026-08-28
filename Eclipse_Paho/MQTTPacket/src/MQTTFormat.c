@@ -19,22 +19,7 @@
 
 #include <string.h>
 
-const char *MQTTPacket_names[] = {
-    "RESERVED",
-    "CONNECT",
-    "CONNACK",
-    "PUBLISH",
-    "PUBACK",
-    "PUBREC",
-    "PUBREL",
-    "PUBCOMP",
-    "SUBSCRIBE",
-    "SUBACK",
-    "UNSUBSCRIBE",
-    "UNSUBACK",
-    "PINGREQ",
-    "PINGRESP",
-    "DISCONNECT"};
+const char *MQTTPacket_names[] = {"RESERVED", "CONNECT", "CONNACK", "PUBLISH", "PUBACK", "PUBREC", "PUBREL", "PUBCOMP", "SUBSCRIBE", "SUBACK", "UNSUBSCRIBE", "UNSUBACK", "PINGREQ", "PINGRESP", "DISCONNECT"};
 
 const char *MQTTPacket_getName(unsigned short packetid) {
     return MQTTPacket_names[packetid];
@@ -43,52 +28,50 @@ const char *MQTTPacket_getName(unsigned short packetid) {
 int MQTTStringFormat_connect(char *strbuf, int strbuflen, MQTTPacket_connectData *data) {
     int strindex = 0;
 
-    strindex = snprintf(strbuf, strbuflen, "CONNECT MQTT version %d, client id %.*s, clean session "
-                                           "%d, keep alive %d",
+    strindex = snprintf(strbuf,
+                        strbuflen,
+                        "CONNECT MQTT version %d, client id %.*s, clean session "
+                        "%d, keep alive %d",
                         (int)data->MQTTVersion,
                         data->clientID.lenstring.len,
                         data->clientID.lenstring.data,
                         (int)data->cleansession,
                         data->keepAliveInterval);
     if (data->willFlag)
-        strindex += snprintf(
-            &strbuf[strindex], strbuflen - strindex, ", will QoS %d, will retain %d, will topic %.*s, will message %.*s", data->will.qos, data->will.retained, data->will.topicName.lenstring.len, data->will.topicName.lenstring.data, data->will.message.lenstring.len, data->will.message.lenstring.data);
+        strindex += snprintf(&strbuf[strindex], strbuflen - strindex, ", will QoS %d, will retain %d, will topic %.*s, will message %.*s", data->will.qos, data->will.retained, data->will.topicName.lenstring.len, data->will.topicName.lenstring.data, data->will.message.lenstring.len, data->will.message.lenstring.data);
     if (data->username.lenstring.data && data->username.lenstring.len > 0)
-        strindex +=
-            snprintf(&strbuf[strindex], strbuflen - strindex, ", user name %.*s", data->username.lenstring.len, data->username.lenstring.data);
+        strindex += snprintf(&strbuf[strindex], strbuflen - strindex, ", user name %.*s", data->username.lenstring.len, data->username.lenstring.data);
     if (data->password.lenstring.data && data->password.lenstring.len > 0)
-        strindex +=
-            snprintf(&strbuf[strindex], strbuflen - strindex, ", password %.*s", data->password.lenstring.len, data->password.lenstring.data);
+        strindex += snprintf(&strbuf[strindex], strbuflen - strindex, ", password %.*s", data->password.lenstring.len, data->password.lenstring.data);
     return strindex;
 }
 
 int MQTTStringFormat_connack(char *strbuf, int strbuflen, unsigned char connack_rc, unsigned char sessionPresent) {
-    int strindex =
-        snprintf(strbuf, strbuflen, "CONNACK session present %d, rc %d", sessionPresent, connack_rc);
+    int strindex = snprintf(strbuf, strbuflen, "CONNACK session present %d, rc %d", sessionPresent, connack_rc);
     return strindex;
 }
 
 int MQTTStringFormat_publish(char *strbuf, int strbuflen, unsigned char dup, int qos, unsigned char retained, unsigned short packetid, MQTTString topicName, unsigned char *payload, int payloadlen) {
-    int strindex =
-        snprintf(strbuf, strbuflen, "PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, "
-                                    "payload length %d, payload %.*s",
-                 dup,
-                 qos,
-                 retained,
-                 packetid,
-                 (topicName.lenstring.len < 20) ? topicName.lenstring.len : 20,
-                 topicName.lenstring.data,
-                 payloadlen,
-                 (payloadlen < 20) ? payloadlen : 20,
-                 payload);
+    int strindex = snprintf(strbuf,
+                            strbuflen,
+                            "PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, "
+                            "payload length %d, payload %.*s",
+                            dup,
+                            qos,
+                            retained,
+                            packetid,
+                            (topicName.lenstring.len < 20) ? topicName.lenstring.len : 20,
+                            topicName.lenstring.data,
+                            payloadlen,
+                            (payloadlen < 20) ? payloadlen : 20,
+                            payload);
     return strindex;
 }
 
 int MQTTStringFormat_ack(char *strbuf, int strbuflen, unsigned char packettype, unsigned char dup, unsigned short packetid) {
     int strindex = snprintf(strbuf, strbuflen, "%s, packet id %d", MQTTPacket_names[packettype], packetid);
     if (dup)
-        strindex +=
-            snprintf(strbuf + strindex, strbuflen - strindex, ", dup %d", dup);
+        strindex += snprintf(strbuf + strindex, strbuflen - strindex, ", dup %d", dup);
     return strindex;
 }
 
@@ -126,8 +109,7 @@ char *MQTTFormat_toClientString(char *strbuf, int strbuflen, unsigned char *buf,
         int qos, payloadlen;
         MQTTString topicName = MQTTString_initializer;
         if (MQTTDeserialize_publish(&dup, &qos, &retained, &packetid, &topicName, &payload, &payloadlen, buf, buflen) == 1)
-            strindex =
-                MQTTStringFormat_publish(strbuf, strbuflen, dup, qos, retained, packetid, topicName, payload, payloadlen);
+            strindex = MQTTStringFormat_publish(strbuf, strbuflen, dup, qos, retained, packetid, topicName, payload, payloadlen);
     } break;
     case PUBACK:
     case PUBREC:
@@ -136,8 +118,7 @@ char *MQTTFormat_toClientString(char *strbuf, int strbuflen, unsigned char *buf,
         unsigned char packettype, dup;
         unsigned short packetid;
         if (MQTTDeserialize_ack(&packettype, &dup, &packetid, buf, buflen) == 1)
-            strindex =
-                MQTTStringFormat_ack(strbuf, strbuflen, packettype, dup, packetid);
+            strindex = MQTTStringFormat_ack(strbuf, strbuflen, packettype, dup, packetid);
     } break;
     case SUBACK: {
         unsigned short packetid;
@@ -154,8 +135,7 @@ char *MQTTFormat_toClientString(char *strbuf, int strbuflen, unsigned char *buf,
     case PINGREQ:
     case PINGRESP:
     case DISCONNECT:
-        strindex =
-            snprintf(strbuf, strbuflen, "%s", MQTTPacket_names[header.bits.type]);
+        strindex = snprintf(strbuf, strbuflen, "%s", MQTTPacket_names[header.bits.type]);
         break;
     }
     return strbuf;
@@ -185,8 +165,7 @@ char *MQTTFormat_toServerString(char *strbuf, int strbuflen, unsigned char *buf,
         int qos, payloadlen;
         MQTTString topicName = MQTTString_initializer;
         if (MQTTDeserialize_publish(&dup, &qos, &retained, &packetid, &topicName, &payload, &payloadlen, buf, buflen) == 1)
-            strindex =
-                MQTTStringFormat_publish(strbuf, strbuflen, dup, qos, retained, packetid, topicName, payload, payloadlen);
+            strindex = MQTTStringFormat_publish(strbuf, strbuflen, dup, qos, retained, packetid, topicName, payload, payloadlen);
     } break;
     case PUBACK:
     case PUBREC:
@@ -195,8 +174,7 @@ char *MQTTFormat_toServerString(char *strbuf, int strbuflen, unsigned char *buf,
         unsigned char packettype, dup;
         unsigned short packetid;
         if (MQTTDeserialize_ack(&packettype, &dup, &packetid, buf, buflen) == 1)
-            strindex =
-                MQTTStringFormat_ack(strbuf, strbuflen, packettype, dup, packetid);
+            strindex = MQTTStringFormat_ack(strbuf, strbuflen, packettype, dup, packetid);
     } break;
     case SUBSCRIBE: {
         unsigned char dup;
@@ -219,8 +197,7 @@ char *MQTTFormat_toServerString(char *strbuf, int strbuflen, unsigned char *buf,
     case PINGREQ:
     case PINGRESP:
     case DISCONNECT:
-        strindex =
-            snprintf(strbuf, strbuflen, "%s", MQTTPacket_names[header.bits.type]);
+        strindex = snprintf(strbuf, strbuflen, "%s", MQTTPacket_names[header.bits.type]);
         break;
     }
     strbuf[strbuflen] = '\0';

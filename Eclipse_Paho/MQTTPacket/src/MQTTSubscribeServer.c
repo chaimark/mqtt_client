@@ -62,8 +62,7 @@ int MQTTDeserialize_subscribe(unsigned char *dup, unsigned short *packetid, int 
             goto exit;
         if (!readMQTTLenString(&topicFilters[*count], &curdata, enddata))
             goto exit;
-        if (curdata >=
-            enddata) /* do we have enough data to read the req_qos version byte? */
+        if (curdata >= enddata) /* do we have enough data to read the req_qos version byte? */
             goto exit;
         requestedQoSs[*count] = readChar(&curdata);
         (*count)++;
@@ -104,8 +103,7 @@ int MQTTSerialize_suback(unsigned char *buf, int buflen, unsigned short packetid
 
     writeInt(&ptr, packetid);
 
-    for (i = 0; i < count; ++i)
-        writeChar(&ptr, grantedQoSs[i]);
+    for (i = 0; i < count; ++i) writeChar(&ptr, grantedQoSs[i]);
 
     rc = ptr - buf;
 exit:

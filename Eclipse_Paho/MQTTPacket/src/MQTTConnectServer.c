@@ -61,9 +61,7 @@ int MQTTDeserialize_connect(MQTTPacket_connectData *data, unsigned char *buf, in
 
     curdata += MQTTPacket_decodeBuf(curdata, &mylen); /* read remaining length */
 
-    if (!readMQTTLenString(&Protocol, &curdata, enddata) ||
-        enddata - curdata <
-            0) /* do we have enough data to read the protocol version byte? */
+    if (!readMQTTLenString(&Protocol, &curdata, enddata) || enddata - curdata < 0) /* do we have enough data to read the protocol version byte? */
         goto exit;
 
     version = (int)readChar(&curdata); /* Protocol version */
@@ -80,17 +78,13 @@ int MQTTDeserialize_connect(MQTTPacket_connectData *data, unsigned char *buf, in
         if (flags.bits.will) {
             data->will.qos = flags.bits.willQoS;
             data->will.retained = flags.bits.willRetain;
-            if (!readMQTTLenString(&data->will.topicName, &curdata, enddata) ||
-                !readMQTTLenString(&data->will.message, &curdata, enddata))
+            if (!readMQTTLenString(&data->will.topicName, &curdata, enddata) || !readMQTTLenString(&data->will.message, &curdata, enddata))
                 goto exit;
         }
         if (flags.bits.username) {
-            if (enddata - curdata < 3 ||
-                !readMQTTLenString(&data->username, &curdata, enddata))
+            if (enddata - curdata < 3 || !readMQTTLenString(&data->username, &curdata, enddata))
                 goto exit; /* username flag set, but no username supplied - invalid */
-            if (flags.bits.password &&
-                (enddata - curdata < 3 ||
-                 !readMQTTLenString(&data->password, &curdata, enddata)))
+            if (flags.bits.password && (enddata - curdata < 3 || !readMQTTLenString(&data->password, &curdata, enddata)))
                 goto exit; /* password flag set, but no password supplied - invalid */
         } else if (flags.bits.password)
             goto exit; /* password flag set without username - invalid */

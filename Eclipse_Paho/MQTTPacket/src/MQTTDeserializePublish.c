@@ -50,13 +50,10 @@ int MQTTDeserialize_publish(unsigned char *dup, int *qos, unsigned char *retaine
     *qos = header.bits.qos;
     *retained = header.bits.retain;
 
-    curdata +=
-        (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
+    curdata += (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
     enddata = curdata + mylen;
 
-    if (!readMQTTLenString(topicName, &curdata, enddata) ||
-        enddata - curdata <
-            0) /* do we have enough data to read the protocol version byte? */
+    if (!readMQTTLenString(topicName, &curdata, enddata) || enddata - curdata < 0) /* do we have enough data to read the protocol version byte? */
         goto exit;
 
     if (*qos > 0)
@@ -93,8 +90,7 @@ int MQTTDeserialize_ack(unsigned char *packettype, unsigned char *dup, unsigned 
     *dup = header.bits.dup;
     *packettype = header.bits.type;
 
-    curdata +=
-        (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
+    curdata += (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
     enddata = curdata + mylen;
 
     if (enddata - curdata < 2)

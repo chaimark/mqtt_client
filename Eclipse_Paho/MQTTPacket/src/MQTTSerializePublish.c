@@ -59,8 +59,7 @@ int MQTTSerialize_publish(unsigned char *buf, int buflen, unsigned char dup, int
     int rc = 0;
 
     FUNC_ENTRY;
-    if (MQTTPacket_len(rem_len = MQTTSerialize_publishLength(
-                           qos, topicName, payloadlen)) > buflen) {
+    if (MQTTPacket_len(rem_len = MQTTSerialize_publishLength(qos, topicName, payloadlen)) > buflen) {
         rc = MQTTPACKET_BUFFER_TOO_SHORT;
         goto exit;
     }

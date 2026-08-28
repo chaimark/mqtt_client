@@ -38,8 +38,7 @@ int MQTTSerialize_connectLength(MQTTPacket_connectData *options) {
 
     len += MQTTstrlen(options->clientID) + 2;
     if (options->willFlag)
-        len += MQTTstrlen(options->will.topicName) + 2 +
-               MQTTstrlen(options->will.message) + 2;
+        len += MQTTstrlen(options->will.topicName) + 2 + MQTTstrlen(options->will.message) + 2;
     if (options->username.cstring || options->username.lenstring.data)
         len += MQTTstrlen(options->username) + 2;
     if (options->password.cstring || options->password.lenstring.data)
@@ -124,10 +123,7 @@ exit:
  * @param len the length in bytes of the data in the supplied buffer
  * @return error code.  1 is success, 0 is failure
  */
-int MQTTDeserialize_connack(unsigned char *sessionPresent,
-                            unsigned char *connack_rc,
-                            unsigned char *buf,
-                            int buflen) {
+int MQTTDeserialize_connack(unsigned char *sessionPresent, unsigned char *connack_rc, unsigned char *buf, int buflen) {
     (void)buflen;
     MQTTHeader header = {0};
     unsigned char *curdata = buf;
@@ -141,8 +137,7 @@ int MQTTDeserialize_connack(unsigned char *sessionPresent,
     if (header.bits.type != CONNACK)
         goto exit;
 
-    curdata +=
-        (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
+    curdata += (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
     enddata = curdata + mylen;
     if (enddata - curdata < 2)
         goto exit;

@@ -32,8 +32,7 @@ int MQTTSerialize_unsubscribeLength(int count, MQTTString topicFilters[]) {
     int i;
     int len = 2; /* packetid */
 
-    for (i = 0; i < count; ++i)
-        len += 2 + MQTTstrlen(topicFilters[i]); /* length + topic*/
+    for (i = 0; i < count; ++i) len += 2 + MQTTstrlen(topicFilters[i]); /* length + topic*/
     return len;
 }
 
@@ -57,8 +56,7 @@ int MQTTSerialize_unsubscribe(unsigned char *buf, int buflen, unsigned char dup,
     int i = 0;
 
     FUNC_ENTRY;
-    if (MQTTPacket_len(rem_len = MQTTSerialize_unsubscribeLength(
-                           count, topicFilters)) > buflen) {
+    if (MQTTPacket_len(rem_len = MQTTSerialize_unsubscribeLength(count, topicFilters)) > buflen) {
         rc = MQTTPACKET_BUFFER_TOO_SHORT;
         goto exit;
     }
@@ -74,8 +72,7 @@ int MQTTSerialize_unsubscribe(unsigned char *buf, int buflen, unsigned char dup,
 
     writeInt(&ptr, packetid);
 
-    for (i = 0; i < count; ++i)
-        writeMQTTString(&ptr, topicFilters[i]);
+    for (i = 0; i < count; ++i) writeMQTTString(&ptr, topicFilters[i]);
 
     rc = ptr - buf;
 exit:

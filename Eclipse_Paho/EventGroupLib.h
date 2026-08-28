@@ -44,7 +44,6 @@ extern eventGroup newEventGroup(void);
 extern void cleanEventGroup(eventGroup This);
 
 // 安全宏 - 防止忘记释放
-#define eventGroup_malloc(Name) \
-    __attribute__((cleanup(cleanEventGroup))) eventGroup Name = newEventGroup();
+#define eventGroup_malloc(Name) __attribute__((cleanup(cleanEventGroup))) eventGroup Name = newEventGroup();
 
 #endif

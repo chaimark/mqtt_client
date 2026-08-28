@@ -131,8 +131,7 @@ int TLSConnectNetwork(Network *n, char *addr, int port, SlSockSecureFiles_t *cer
     }
 
     if (certificates != NULL) {
-        retVal =
-            sl_SetSockOpt(n->my_socket, SL_SOL_SOCKET, SL_SO_SECURE_FILES, certificates->secureFiles, sizeof(SlSockSecureFiles_t));
+        retVal = sl_SetSockOpt(n->my_socket, SL_SOL_SOCKET, SL_SO_SECURE_FILES, certificates->secureFiles, sizeof(SlSockSecureFiles_t));
         if (retVal < 0) {
             return retVal;
         }

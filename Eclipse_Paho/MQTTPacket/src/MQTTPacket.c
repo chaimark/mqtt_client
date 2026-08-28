@@ -96,8 +96,7 @@ static unsigned char *bufptr;
 int bufchar(unsigned char *c, int count) {
     int i;
 
-    for (i = 0; i < count; ++i)
-        *c = *bufptr++;
+    for (i = 0; i < count; ++i) *c = *bufptr++;
     return count;
 }
 
@@ -199,8 +198,7 @@ int readMQTTLenString(MQTTString *mqttstring, unsigned char **pptr, unsigned cha
     /* the first two bytes are the length of the string */
     if (enddata - (*pptr) > 1) /* enough length to read the integer? */
     {
-        mqttstring->lenstring.len =
-            readInt(pptr); /* increments pptr to point past length */
+        mqttstring->lenstring.len = readInt(pptr); /* increments pptr to point past length */
         if (&(*pptr)[mqttstring->lenstring.len] <= enddata) {
             mqttstring->lenstring.data = (char *)*pptr;
             *pptr += mqttstring->lenstring.len;
@@ -272,9 +270,7 @@ int MQTTPacket_read(unsigned char *buf, int buflen, int (*getfn)(unsigned char *
     len = 1;
     /* 2. read the remaining length.  This is variable in itself */
     MQTTPacket_decode(getfn, &rem_len);
-    len += MQTTPacket_encode(
-        buf + 1,
-        rem_len); /* put the original remaining length back into the buffer */
+    len += MQTTPacket_encode(buf + 1, rem_len); /* put the original remaining length back into the buffer */
 
     /* 3. read the rest of the buffer using a callback to supply the rest of the
      * data */
@@ -359,9 +355,8 @@ int MQTTPacket_readnb(unsigned char *buf, int buflen, MQTTTransport *trp) {
             goto exit;
         if (frc == 0)
             return 0;
-        trp->len = 1 + MQTTPacket_encode(
-                           buf + 1, trp->rem_len); /* put the original remaining
-                                                      length back into the buffer */
+        trp->len = 1 + MQTTPacket_encode(buf + 1, trp->rem_len); /* put the original remaining
+                                                                    length back into the buffer */
         if ((trp->rem_len + trp->len) > buflen)
             goto exit;
         ++trp->state;

@@ -32,8 +32,7 @@ int MQTTSerialize_subscribeLength(int count, MQTTString topicFilters[]) {
     int i;
     int len = 2; /* packetid */
 
-    for (i = 0; i < count; ++i)
-        len += 2 + MQTTstrlen(topicFilters[i]) + 1; /* length + topic + req_qos */
+    for (i = 0; i < count; ++i) len += 2 + MQTTstrlen(topicFilters[i]) + 1; /* length + topic + req_qos */
     return len;
 }
 
@@ -57,8 +56,7 @@ int MQTTSerialize_subscribe(unsigned char *buf, int buflen, unsigned char dup, u
     int i = 0;
 
     FUNC_ENTRY;
-    if (MQTTPacket_len(rem_len = MQTTSerialize_subscribeLength(
-                           count, topicFilters)) > buflen) {
+    if (MQTTPacket_len(rem_len = MQTTSerialize_subscribeLength(count, topicFilters)) > buflen) {
         rc = MQTTPACKET_BUFFER_TOO_SHORT;
         goto exit;
     }
@@ -111,8 +109,7 @@ int MQTTDeserialize_suback(unsigned short *packetid, int maxcount, int *count, i
     if (header.bits.type != SUBACK)
         goto exit;
 
-    curdata +=
-        (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
+    curdata += (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
     enddata = curdata + mylen;
     if (enddata - curdata < 2)
         goto exit;

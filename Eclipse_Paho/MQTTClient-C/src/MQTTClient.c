@@ -27,8 +27,7 @@ static void NewMessageData(MessageData *md, MQTTString *aTopicName, MQTTMessage 
 }
 
 static int getNextPacketId(MQTTClient *c) {
-    return c->next_packetid =
-               (c->next_packetid == MAX_PACKET_ID) ? 1 : c->next_packetid + 1;
+    return c->next_packetid = (c->next_packetid == MAX_PACKET_ID) ? 1 : c->next_packetid + 1;
 }
 
 static int sendPacket(MQTTClient *c, int length, Timer *timer) {
@@ -54,8 +53,7 @@ void MQTTClientInit(MQTTClient *c, Network *network, unsigned int command_timeou
     int i;
     c->ipstack = network;
 
-    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i)
-        c->messageHandlers[i].topicFilter = 0;
+    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) c->messageHandlers[i].topicFilter = 0;
     c->command_timeout_ms = command_timeout_ms;
     c->buf = sendbuf;
     c->buf_size = sendbuf_size;
@@ -110,9 +108,7 @@ static int readPacket(MQTTClient *c, Timer *timer) {
     len = 1;
     /* 2. read the remaining length.  This is variable in itself */
     decodePacket(c, &rem_len, TimerLeftMS(timer));
-    len += MQTTPacket_encode(
-        c->readbuf + 1,
-        rem_len); /* put the original remaining length back into the buffer */
+    len += MQTTPacket_encode(c->readbuf + 1, rem_len); /* put the original remaining length back into the buffer */
 
     if ((size_t)rem_len > (c->readbuf_size - len)) {
         rc = BUFFER_OVERFLOW;
@@ -121,8 +117,7 @@ static int readPacket(MQTTClient *c, Timer *timer) {
 
     /* 3. read the rest of the buffer using a callback to supply the rest of the
      * data */
-    if (rem_len > 0 &&
-        (rc = c->ipstack->mqttread(c->ipstack, c->readbuf + len, rem_len, TimerLeftMS(timer)) != rem_len)) {
+    if (rem_len > 0 && (rc = c->ipstack->mqttread(c->ipstack, c->readbuf + len, rem_len, TimerLeftMS(timer)) != rem_len)) {
         rc = 0;
         goto exit;
     }
@@ -150,11 +145,9 @@ static char isTopicMatched(char *topicFilter, MQTTString *topicName) {
             break;
         if (*curf != '+' && *curf != '#' && *curf != *curn)
             break;
-        if (*curf ==
-            '+') { // skip until we meet the next separator, or end of string
+        if (*curf == '+') { // skip until we meet the next separator, or end of string
             char *nextpos = curn + 1;
-            while (nextpos < curn_end && *nextpos != '/')
-                nextpos = ++curn + 1;
+            while (nextpos < curn_end && *nextpos != '/') nextpos = ++curn + 1;
         } else if (*curf == '#')
             curn = curn_end - 1; // skip until end of string
         curf++;
@@ -170,11 +163,7 @@ int deliverMessage(MQTTClient *c, MQTTString *topicName, MQTTMessage *message) {
 
     // we have to find the right message handler - indexed by topic
     for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) {
-        if (c->messageHandlers[i].topicFilter != 0 &&
-            (MQTTPacket_equals(topicName,
-                               (char *)c->messageHandlers[i].topicFilter) ||
-             isTopicMatched((char *)c->messageHandlers[i].topicFilter,
-                            topicName))) {
+        if (c->messageHandlers[i].topicFilter != 0 && (MQTTPacket_equals(topicName, (char *)c->messageHandlers[i].topicFilter) || isTopicMatched((char *)c->messageHandlers[i].topicFilter, topicName))) {
             if (c->messageHandlers[i].fp != NULL) {
                 MessageData md;
                 NewMessageData(&md, topicName, message);
@@ -208,8 +197,7 @@ int keepalive(MQTTClient *c) {
             TimerInit(&timer);
             TimerCountdownMS(&timer, 1000);
             int len = MQTTSerialize_pingreq(c->buf, c->buf_size);
-            if (len > 0 &&
-                (rc = sendPacket(c, len, &timer)) == SUCCESS) // send the ping packet
+            if (len > 0 && (rc = sendPacket(c, len, &timer)) == SUCCESS) // send the ping packet
                 c->ping_outstanding = 1;
         }
     }
@@ -221,8 +209,7 @@ exit:
 void MQTTCleanSession(MQTTClient *c) {
     int i = 0;
 
-    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i)
-        c->messageHandlers[i].topicFilter = NULL;
+    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) c->messageHandlers[i].topicFilter = NULL;
 }
 
 void MQTTCloseSession(MQTTClient *c) {
@@ -235,8 +222,7 @@ void MQTTCloseSession(MQTTClient *c) {
 int cycle(MQTTClient *c, Timer *timer) {
     int len = 0, rc = SUCCESS;
 
-    int packet_type =
-        readPacket(c, timer); /* read the socket, see what work is due */
+    int packet_type = readPacket(c, timer); /* read the socket, see what work is due */
 
     switch (packet_type) {
     default:
@@ -255,8 +241,7 @@ int cycle(MQTTClient *c, Timer *timer) {
         MQTTString topicName;
         MQTTMessage msg;
         int intQoS;
-        msg.payloadlen =
-            0; /* this is a size_t, but deserialize publish sets this as int */
+        msg.payloadlen = 0; /* this is a size_t, but deserialize publish sets this as int */
         if (MQTTDeserialize_publish(&msg.dup, &intQoS, &msg.retained, &msg.id, &topicName, (unsigned char **)&msg.payload, (int *)&msg.payloadlen, c->readbuf, c->readbuf_size) != 1)
             goto exit;
         msg.qos = (enum QoS)intQoS;
@@ -281,12 +266,10 @@ int cycle(MQTTClient *c, Timer *timer) {
         unsigned char dup, type;
         if (MQTTDeserialize_ack(&type, &dup, &mypacketid, c->readbuf, c->readbuf_size) != 1)
             rc = FAILURE;
-        else if ((len =
-                      MQTTSerialize_ack(c->buf, c->buf_size, (packet_type == PUBREC) ? PUBREL : PUBCOMP, 0, mypacketid)) <= 0)
+        else if ((len = MQTTSerialize_ack(c->buf, c->buf_size, (packet_type == PUBREC) ? PUBREL : PUBCOMP, 0, mypacketid)) <= 0)
             rc = FAILURE;
-        else if ((rc = sendPacket(c, len, timer)) !=
-                 SUCCESS) // send the PUBREL packet
-            rc = FAILURE; // there was a problem
+        else if ((rc = sendPacket(c, len, timer)) != SUCCESS) // send the PUBREL packet
+            rc = FAILURE;                                     // there was a problem
         if (rc == FAILURE)
             goto exit; // there was a problem
         break;
@@ -344,8 +327,7 @@ void MQTTRun(void *parm) {
 #if defined(MQTT_TASK)
         MutexLock(&c->mutex);
 #endif
-        TimerCountdownMS(&timer,
-                         500); /* Don't wait too long if no traffic is incoming */
+        TimerCountdownMS(&timer, 500); /* Don't wait too long if no traffic is incoming */
         cycle(c, &timer);
 #if defined(MQTT_TASK)
         MutexUnlock(&c->mutex);
@@ -395,9 +377,8 @@ int MQTTConnectWithResults(MQTTClient *c, MQTTPacket_connectData *options, MQTTC
     TimerCountdown(&c->last_received, c->keepAliveInterval);
     if ((len = MQTTSerialize_connect(c->buf, c->buf_size, options)) <= 0)
         goto exit;
-    if ((rc = sendPacket(c, len, &connect_timer)) !=
-        SUCCESS)   // send the connect packet
-        goto exit; // there was a problem
+    if ((rc = sendPacket(c, len, &connect_timer)) != SUCCESS) // send the connect packet
+        goto exit;                                            // there was a problem
 
     // this will be a blocking call, wait for the connack
     if (waitfor(c, CONNACK, &connect_timer) == CONNACK) {
@@ -434,8 +415,7 @@ int MQTTSetMessageHandler(MQTTClient *c, const char *topicFilter, messageHandler
 
     /* first check for an existing matching slot */
     for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) {
-        if (c->messageHandlers[i].topicFilter != NULL &&
-            strcmp(c->messageHandlers[i].topicFilter, topicFilter) == 0) {
+        if (c->messageHandlers[i].topicFilter != NULL && strcmp(c->messageHandlers[i].topicFilter, topicFilter) == 0) {
             if (messageHandler == NULL) /* remove existing */
             {
                 c->messageHandlers[i].topicFilter = NULL;
@@ -534,8 +514,7 @@ int MQTTUnsubscribe(MQTTClient *c, const char *topicFilter) {
 
     if (waitfor(c, UNSUBACK, &timer) == UNSUBACK) {
         unsigned short mypacketid; // should be the same as the packetid above
-        if (MQTTDeserialize_unsuback(&mypacketid, c->readbuf, c->readbuf_size) ==
-            1) {
+        if (MQTTDeserialize_unsuback(&mypacketid, c->readbuf, c->readbuf_size) == 1) {
             /* remove the subscription message handler associated with this topic, if
              * there is one */
             MQTTSetMessageHandler(c, topicFilter, NULL);
@@ -571,8 +550,7 @@ int MQTTPublish(MQTTClient *c, const char *topicName, MQTTMessage *message) {
     if (message->qos == QOS1 || message->qos == QOS2)
         message->id = getNextPacketId(c);
 
-    len = MQTTSerialize_publish(
-        c->buf, c->buf_size, 0, message->qos, message->retained, message->id, topic, (unsigned char *)message->payload, message->payloadlen);
+    len = MQTTSerialize_publish(c->buf, c->buf_size, 0, message->qos, message->retained, message->id, topic, (unsigned char *)message->payload, message->payloadlen);
     if (len <= 0)
         goto exit;
     if ((rc = sendPacket(c, len, &timer)) != SUCCESS) // send the subscribe packet

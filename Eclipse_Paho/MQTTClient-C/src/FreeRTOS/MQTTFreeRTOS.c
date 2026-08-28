@@ -20,17 +20,15 @@
 int ThreadStart(Thread *thread, void (*fn)(void *), void *arg) {
     int rc = 0;
     uint16_t usTaskStackSize = (configMINIMAL_STACK_SIZE * 5);
-    UBaseType_t uxTaskPriority = uxTaskPriorityGet(
-        NULL); /* set the priority as the same as the calling task*/
+    UBaseType_t uxTaskPriority = uxTaskPriorityGet(NULL); /* set the priority as the same as the calling task*/
 
-    rc = xTaskCreate(
-        fn,              /* The function that implements the task. */
-        "MQTTTask",      /* Just a text name for the task to aid debugging. */
-        usTaskStackSize, /* The stack size is defined in FreeRTOSIPConfig.h. */
-        arg,             /* The task parameter, not used in this case. */
-        uxTaskPriority,  /* The priority assigned to the task is defined in
-                            FreeRTOSConfig.h. */
-        &thread->task);  /* The task handle is not used. */
+    rc = xTaskCreate(fn,              /* The function that implements the task. */
+                     "MQTTTask",      /* Just a text name for the task to aid debugging. */
+                     usTaskStackSize, /* The stack size is defined in FreeRTOSIPConfig.h. */
+                     arg,             /* The task parameter, not used in this case. */
+                     uxTaskPriority,  /* The priority assigned to the task is defined in
+                                         FreeRTOSConfig.h. */
+                     &thread->task);  /* The task handle is not used. */
 
     return rc;
 }
@@ -48,10 +46,9 @@ int MutexUnlock(Mutex *mutex) {
 }
 
 void TimerCountdownMS(Timer *timer, unsigned int timeout_ms) {
-    timer->xTicksToWait =
-        timeout_ms / portTICK_PERIOD_MS;    /* convert milliseconds to ticks */
-    vTaskSetTimeOutState(&timer->xTimeOut); /* Record the time at which this
-                                               function was entered. */
+    timer->xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+    vTaskSetTimeOutState(&timer->xTimeOut);                /* Record the time at which this
+                                                              function was entered. */
 }
 
 void TimerCountdown(Timer *timer, unsigned int timeout) {
@@ -59,9 +56,7 @@ void TimerCountdown(Timer *timer, unsigned int timeout) {
 }
 
 int TimerLeftMS(Timer *timer) {
-    xTaskCheckForTimeOut(
-        &timer->xTimeOut,
-        &timer->xTicksToWait); /* updates xTicksToWait to the number left */
+    xTaskCheckForTimeOut(&timer->xTimeOut, &timer->xTicksToWait); /* updates xTicksToWait to the number left */
     return (timer->xTicksToWait < 0) ? 0 : (timer->xTicksToWait * portTICK_PERIOD_MS);
 }
 
@@ -75,13 +70,11 @@ void TimerInit(Timer *timer) {
 }
 
 int FreeRTOS_read(Network *n, unsigned char *buffer, int len, int timeout_ms) {
-    TickType_t xTicksToWait =
-        timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+    TickType_t xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
     TimeOut_t xTimeOut;
     int recvLen = 0;
 
-    vTaskSetTimeOutState(
-        &xTimeOut); /* Record the time at which this function was entered. */
+    vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
     do {
         int rc = 0;
 
@@ -93,20 +86,17 @@ int FreeRTOS_read(Network *n, unsigned char *buffer, int len, int timeout_ms) {
             recvLen = rc;
             break;
         }
-    } while (recvLen < len &&
-             xTaskCheckForTimeOut(&xTimeOut, &xTicksToWait) == pdFALSE);
+    } while (recvLen < len && xTaskCheckForTimeOut(&xTimeOut, &xTicksToWait) == pdFALSE);
 
     return recvLen;
 }
 
 int FreeRTOS_write(Network *n, unsigned char *buffer, int len, int timeout_ms) {
-    TickType_t xTicksToWait =
-        timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+    TickType_t xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
     TimeOut_t xTimeOut;
     int sentLen = 0;
 
-    vTaskSetTimeOutState(
-        &xTimeOut); /* Record the time at which this function was entered. */
+    vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
     do {
         int rc = 0;
 
@@ -118,8 +108,7 @@ int FreeRTOS_write(Network *n, unsigned char *buffer, int len, int timeout_ms) {
             sentLen = rc;
             break;
         }
-    } while (sentLen < len &&
-             xTaskCheckForTimeOut(&xTimeOut, &xTicksToWait) == pdFALSE);
+    } while (sentLen < len && xTaskCheckForTimeOut(&xTimeOut, &xTicksToWait) == pdFALSE);
 
     return sentLen;
 }

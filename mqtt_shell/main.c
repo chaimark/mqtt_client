@@ -82,10 +82,8 @@ void printConfigStu(void) {
     printf("    userid: %s\n", MqttConfigSpaces.UserId);
     printf("    url: %s\n", MqttConfigSpaces.Url);
     printf("    port: %d\n", MqttConfigSpaces.Port);
-    printf("    isWebClient: %s\n",
-           MqttConfigSpaces.IsWebClient ? "true" : "false");
-    printf("    isShowTime: %s\n",
-           MqttConfigSpaces.IsShowTime ? "true" : "false");
+    printf("    isWebClient: %s\n", MqttConfigSpaces.IsWebClient ? "true" : "false");
+    printf("    isShowTime: %s\n", MqttConfigSpaces.IsShowTime ? "true" : "false");
     printf("    cmd_Name_Array: %s\n", MqttConfigSpaces.CmdNameArray);
     printf("    cmd_Var_Array: %s\n", MqttConfigSpaces.CmdVarArray);
     printf("}\n");
@@ -150,8 +148,7 @@ int _readFile(FILE *file, bool IsUpTopic) {
     MqttConfigSpaces.IsWebClient = MqttConfig.getBool(&MqttConfig, "isWebClient");
     MqttConfigSpaces.IsShowTime = MqttConfig.getBool(&MqttConfig, "isShowTime");
 
-    if ((MqttConfig.isJsonNull(&MqttConfig, "cmd_Name_Array") >= 0) &&
-        (MqttConfig.isJsonNull(&MqttConfig, "cmd_Var_Array") >= 0)) {
+    if ((MqttConfig.isJsonNull(&MqttConfig, "cmd_Name_Array") >= 0) && (MqttConfig.isJsonNull(&MqttConfig, "cmd_Var_Array") >= 0)) {
         CmdVar = MqttConfig.getArray(&MqttConfig, "cmd_Var_Array", NEW_NAME(MqttConfigSpaces.CmdVarArray));
         CmdName = MqttConfig.getArray(&MqttConfig, "cmd_Name_Array", NEW_NAME(MqttConfigSpaces.CmdNameArray));
     }
