@@ -10,7 +10,6 @@ mkdir ~/work/mqtt_exe
 cp -rf ./ ~/work/mqtt_exe
 rm ~/work/mqtt_exe/install_mqtt.sh
 cd ~/work/mqtt_exe
-cp -rf ~/git_room/Linux_C_Project/WorkLib/ ~/work/
 
 make
 mv ./main mqx_temp
