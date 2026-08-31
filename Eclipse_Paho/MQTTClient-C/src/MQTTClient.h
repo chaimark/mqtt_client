@@ -34,6 +34,7 @@ extern "C" {
 #define DLLExport
 #endif
 
+#include "MQTTLinux.h"
 #include "MQTTPacket.h"
 
 #if defined(MQTTCLIENT_PLATFORM_HEADER)

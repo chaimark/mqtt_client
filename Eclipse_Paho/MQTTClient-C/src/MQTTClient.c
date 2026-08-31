@@ -16,7 +16,6 @@
  *   Ian Craggs - add ability to set message handler separately #6
  *******************************************************************************/
 #include "MQTTClient.h"
-#include "MQTTLinux.h"
 
 #include <stdio.h>
 #include <string.h>
