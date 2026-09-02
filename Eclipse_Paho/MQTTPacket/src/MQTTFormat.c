@@ -28,15 +28,13 @@ const char *MQTTPacket_getName(unsigned short packetid) {
 int MQTTStringFormat_connect(char *strbuf, int strbuflen, MQTTPacket_connectData *data) {
     int strindex = 0;
 
-    strindex = snprintf(strbuf, strbuflen, "CONNECT MQTT version %d, client id %.*s, clean session "
-                                           "%d, keep alive %d",
-                        (int)data->MQTTVersion,
-                        data->clientID.lenstring.len,
-                        data->clientID.lenstring.data,
-                        (int)data->cleansession,
-                        data->keepAliveInterval);
+    strindex = snprintf(strbuf, strbuflen,
+        "CONNECT MQTT version %d, client id %.*s, clean session "
+        "%d, keep alive %d",
+        (int)data->MQTTVersion, data->clientID.lenstring.len, data->clientID.lenstring.data, (int)data->cleansession, data->keepAliveInterval);
     if (data->willFlag)
-        strindex += snprintf(&strbuf[strindex], strbuflen - strindex, ", will QoS %d, will retain %d, will topic %.*s, will message %.*s", data->will.qos, data->will.retained, data->will.topicName.lenstring.len, data->will.topicName.lenstring.data, data->will.message.lenstring.len, data->will.message.lenstring.data);
+        strindex += snprintf(&strbuf[strindex], strbuflen - strindex, ", will QoS %d, will retain %d, will topic %.*s, will message %.*s", data->will.qos, data->will.retained, data->will.topicName.lenstring.len, data->will.topicName.lenstring.data, data->will.message.lenstring.len,
+            data->will.message.lenstring.data);
     if (data->username.lenstring.data && data->username.lenstring.len > 0)
         strindex += snprintf(&strbuf[strindex], strbuflen - strindex, ", user name %.*s", data->username.lenstring.len, data->username.lenstring.data);
     if (data->password.lenstring.data && data->password.lenstring.len > 0)
@@ -50,17 +48,10 @@ int MQTTStringFormat_connack(char *strbuf, int strbuflen, unsigned char connack_
 }
 
 int MQTTStringFormat_publish(char *strbuf, int strbuflen, unsigned char dup, int qos, unsigned char retained, unsigned short packetid, MQTTString topicName, unsigned char *payload, int payloadlen) {
-    int strindex = snprintf(strbuf, strbuflen, "PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, "
-                                               "payload length %d, payload %.*s",
-                            dup,
-                            qos,
-                            retained,
-                            packetid,
-                            (topicName.lenstring.len < 20) ? topicName.lenstring.len : 20,
-                            topicName.lenstring.data,
-                            payloadlen,
-                            (payloadlen < 20) ? payloadlen : 20,
-                            payload);
+    int strindex = snprintf(strbuf, strbuflen,
+        "PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, "
+        "payload length %d, payload %.*s",
+        dup, qos, retained, packetid, (topicName.lenstring.len < 20) ? topicName.lenstring.len : 20, topicName.lenstring.data, payloadlen, (payloadlen < 20) ? payloadlen : 20, payload);
     return strindex;
 }
 

@@ -51,7 +51,8 @@ void MQTTClientInit(MQTTClient *c, Network *network, unsigned int command_timeou
     int i;
     c->ipstack = network;
 
-    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) c->messageHandlers[i].topicFilter = 0;
+    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i)
+        c->messageHandlers[i].topicFilter = 0;
     c->command_timeout_ms = command_timeout_ms;
     c->buf = sendbuf;
     c->buf_size = sendbuf_size;
@@ -144,7 +145,8 @@ static char isTopicMatched(char *topicFilter, MQTTString *topicName) {
             break;
         if (*curf == '+') { // skip until we meet the next separator, or end of string
             char *nextpos = curn + 1;
-            while (nextpos < curn_end && *nextpos != '/') nextpos = ++curn + 1;
+            while (nextpos < curn_end && *nextpos != '/')
+                nextpos = ++curn + 1;
         } else if (*curf == '#')
             curn = curn_end - 1; // skip until end of string
         curf++;
@@ -206,7 +208,8 @@ exit:
 void MQTTCleanSession(MQTTClient *c) {
     int i = 0;
 
-    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i) c->messageHandlers[i].topicFilter = NULL;
+    for (i = 0; i < MAX_MESSAGE_HANDLERS; ++i)
+        c->messageHandlers[i].topicFilter = NULL;
 }
 
 void MQTTCloseSession(MQTTClient *c) {

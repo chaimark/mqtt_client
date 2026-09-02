@@ -96,7 +96,8 @@ static unsigned char *bufptr;
 int bufchar(unsigned char *c, int count) {
     int i;
 
-    for (i = 0; i < count; ++i) *c = *bufptr++;
+    for (i = 0; i < count; ++i)
+        *c = *bufptr++;
     return count;
 }
 

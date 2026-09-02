@@ -32,7 +32,8 @@ int MQTTSerialize_subscribeLength(int count, MQTTString topicFilters[]) {
     int i;
     int len = 2; /* packetid */
 
-    for (i = 0; i < count; ++i) len += 2 + MQTTstrlen(topicFilters[i]) + 1; /* length + topic + req_qos */
+    for (i = 0; i < count; ++i)
+        len += 2 + MQTTstrlen(topicFilters[i]) + 1; /* length + topic + req_qos */
     return len;
 }
 

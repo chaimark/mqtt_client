@@ -103,7 +103,8 @@ int MQTTSerialize_suback(unsigned char *buf, int buflen, unsigned short packetid
 
     writeInt(&ptr, packetid);
 
-    for (i = 0; i < count; ++i) writeChar(&ptr, grantedQoSs[i]);
+    for (i = 0; i < count; ++i)
+        writeChar(&ptr, grantedQoSs[i]);
 
     rc = ptr - buf;
 exit:
